@@ -13,3 +13,17 @@ pub use crate::x11::*;
 mod windows;
 #[cfg(windows)]
 pub use crate::windows::*;
+
+pub trait InputConnection {
+    fn new() -> Self;
+
+    fn key_down(&self);
+    fn key_up(&self);
+    fn key_press(&self);
+
+    fn button_down(&self, button: MouseButton);
+    fn button_up(&self, button: MouseButton);
+    fn button_press(&self, button: MouseButton);
+
+    fn move_mouse(&self, x: i32, y: i32);
+}

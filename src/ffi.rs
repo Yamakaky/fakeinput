@@ -1,4 +1,4 @@
-use crate::Connection;
+use crate::*;
 use std::ffi::c_void;
 
 #[no_mangle]

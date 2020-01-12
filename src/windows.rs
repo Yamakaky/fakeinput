@@ -2,14 +2,11 @@ use std::default::Default;
 use winapi::ctypes::*;
 use winapi::shared::minwindef::{UINT, WORD};
 use winapi::um::winuser::*;
+use crate::*;
 
 pub struct Connection {}
 
 impl Connection {
-    pub fn new() -> Connection {
-        Connection {}
-    }
-
     fn key_event(&self, pressed: bool) {
         let vkKey: UINT = 0;
         let mut input = INPUT {
@@ -39,21 +36,14 @@ impl Connection {
             );
         }
     }
+}
 
-    pub fn key_down(&self) {
-        self.key_event(true);
+impl InputConnection for Connection {
+    fn new() -> Connection {
+        Connection {}
     }
+    /*
 
-    pub fn key_up(&self) {
-        self.key_event(false);
-    }
-
-    pub fn key_press(&self) {
-        self.key_event(true);
-        self.key_event(false);
-    }
-
-    pub fn move_mouse(&self, x: i32, y: i32) {
         let vkKey: UINT = 0;
         let mut input = INPUT {
             type_: INPUT_MOUSE,
@@ -72,5 +62,33 @@ impl Connection {
                 std::mem::size_of_val(&input) as c_int,
             );
         }
+        */
+
+    fn key_down(&self) {
+        self.key_event(true);
+    }
+
+    fn key_up(&self) {
+        self.key_event(false);
+    }
+
+    fn key_press(&self) {
+        self.key_event(true);
+        self.key_event(false);
+    }
+
+    fn button_down(&self, button: MouseButton) {
+
+    }
+
+    fn button_up(&self, button: MouseButton) {
+
+    }
+
+    fn button_press(&self, button: MouseButton) {
+
+    }
+
+    fn move_mouse(&self, x: i32, y: i32) {
     }
 }
