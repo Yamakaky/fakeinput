@@ -1,0 +1,22 @@
+[package]
+name = "fakeinput"
+version = "0.1.0"
+authors = ["Mikaël Fourrier <mikael.fourrier@protonmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[features]
+ffi = []
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[target.'cfg(unix)'.dependencies.x11]
+version = "2.18"
+features = ["xlib", "xtest"]
+
+[target.'cfg(windows)'.dependencies.winapi]
+version = "0.3"
+features = ["winuser", "impl-default"]
