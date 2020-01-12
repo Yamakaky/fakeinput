@@ -36,33 +36,16 @@ impl Connection {
             );
         }
     }
+
+    fn button_event(&self, button: MouseButton, pressed: bool) {
+        //TODO
+    }
 }
 
 impl InputConnection for Connection {
     fn new() -> Connection {
         Connection {}
     }
-    /*
-
-        let vkKey: UINT = 0;
-        let mut input = INPUT {
-            type_: INPUT_MOUSE,
-            u: INPUT_u::default(),
-        };
-        unsafe {
-            let mouseData = 0;
-            *input.u.mi_mut() = MOUSEINPUT {
-                dwFlags: 0,
-                mouseData,
-                dwExtraInfo: 0,
-            };
-            SendInput(
-                1,
-                &mut input as *mut INPUT,
-                std::mem::size_of_val(&input) as c_int,
-            );
-        }
-        */
 
     fn key_down(&self) {
         self.key_event(true);
@@ -78,15 +61,16 @@ impl InputConnection for Connection {
     }
 
     fn button_down(&self, button: MouseButton) {
-
+        self.button_event(button, true);
     }
 
     fn button_up(&self, button: MouseButton) {
-
+        self.button_event(button, false);
     }
 
     fn button_press(&self, button: MouseButton) {
-
+        self.button_event(button, true);
+        self.button_event(button, false);
     }
 
     fn move_mouse(&self, x: i32, y: i32) {
