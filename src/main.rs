@@ -1,6 +1,7 @@
-use fakeinput::Connection;
+use fakeinput::*;
 
 fn main() {
-    let conn = Connection::new();
-    conn.move_mouse(10, 10);
+    let conn: Connection = InputConnection::new();
+    conn.button_press(MouseButton::ScrollUp);
+    conn.button_press(MouseButton::ScrollUp);
 }

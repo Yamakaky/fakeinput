@@ -53,7 +53,7 @@ impl Connection {
         self.flush();
     }
 
-    pub fn move_mouse(&self, x: i32, y: i32) {
+    fn button_up(&self, button: MouseButton) {
         unsafe {
             //TODO : issue
             let ret = XTestFakeRelativeMotionEvent(
