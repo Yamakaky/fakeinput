@@ -1,21 +1,20 @@
 #![allow(clippy::cast_lossless)]
 
+use ::x11::xlib::*;
+use ::x11::{xlib, xtest};
 use libc::{c_int, c_uint, c_ulong};
 use std::ptr;
-use x11::xlib::*;
-use x11::{keysym, xlib, xtest};
 
-use crate::InputConnection;
-use crate::MouseButton;
+use crate::*;
 
 pub struct Connection {
     display: *mut xlib::Display,
 }
 
 impl Connection {
-    fn key_event(&self, pressed: bool) {
+    fn key_event(&self, key: Key, pressed: bool) {
         unsafe {
-            let keycode = xlib::XKeysymToKeycode(self.display, keysym::XK_A as c_ulong) as c_uint;
+            let keycode = xlib::XKeysymToKeycode(self.display, to_keysym(key)) as c_uint;
 
             assert_ne!(keycode, xlib::NoSymbol as c_uint, "unknown symbol");
             let ret = xtest::XTestFakeKeyEvent(
@@ -67,19 +66,19 @@ impl InputConnection for Connection {
         }
     }
 
-    fn key_down(&self) {
-        self.key_event(true);
+    fn key_down(&self, key: Key) {
+        self.key_event(key, true);
         self.flush();
     }
 
-    fn key_up(&self) {
-        self.key_event(false);
+    fn key_up(&self, key: Key) {
+        self.key_event(key, false);
         self.flush();
     }
 
-    fn key_press(&self) {
-        self.key_event(true);
-        self.key_event(false);
+    fn key_press(&self, key: Key) {
+        self.key_event(key, true);
+        self.key_event(key, false);
         self.flush();
     }
 
@@ -138,4 +137,15 @@ impl Default for Connection {
     fn default() -> Self {
         Connection::new()
     }
+}
+
+fn to_keysym(key: Key) -> KeySym {
+    use ::x11::keysym::*;
+    use Key::*;
+
+    (match key {
+        A => XK_A,
+        B => XK_B,
+        C => XK_C,
+    }) as KeySym
 }

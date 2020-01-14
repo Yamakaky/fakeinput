@@ -1,6 +1,9 @@
 mod common;
 pub use crate::common::*;
 
+mod keys;
+pub use crate::keys::*;
+
 #[cfg(feature = "ffi")]
 mod ffi;
 
@@ -17,9 +20,9 @@ pub use crate::windows::*;
 pub trait InputConnection {
     fn new() -> Self;
 
-    fn key_down(&self);
-    fn key_up(&self);
-    fn key_press(&self);
+    fn key_down(&self, key: Key);
+    fn key_up(&self, key: Key);
+    fn key_press(&self, key: Key);
 
     fn button_down(&self, button: MouseButton);
     fn button_up(&self, button: MouseButton);

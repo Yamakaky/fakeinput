@@ -7,8 +7,8 @@ use crate::*;
 pub struct Connection {}
 
 impl Connection {
-    fn key_event(&self, pressed: bool) {
-        let vkKey: UINT = 0;
+    fn key_event(&self, key: Key, pressed: bool) {
+        let virtual_key = to_virtualkey(key);
         let mut input = INPUT {
             type_: INPUT_KEYBOARD,
             u: INPUT_u::default(),
@@ -18,14 +18,14 @@ impl Connection {
             if !pressed {
                 flags |= KEYEVENTF_KEYUP
             };
-            if vkKey >= VK_LEFT as UINT && vkKey <= VK_DOWN as UINT {
+            if virtual_key >= VK_LEFT as UINT && virtual_key <= VK_DOWN as UINT {
                 flags |= KEYEVENTF_EXTENDEDKEY;
             }
             *input.u.ki_mut() = KEYBDINPUT {
                 time: 0,
                 wVk: 0,
                 // TODO or MapVirtualKeyW ?
-                wScan: MapVirtualKeyA(vkKey, MAPVK_VK_TO_VSC) as WORD,
+                wScan: MapVirtualKeyA(virtual_key, MAPVK_VK_TO_VSC) as WORD,
                 dwFlags: flags,
                 dwExtraInfo: 0,
             };
@@ -47,17 +47,17 @@ impl InputConnection for Connection {
         Connection {}
     }
 
-    fn key_down(&self) {
-        self.key_event(true);
+    fn key_down(&self, key: Key) {
+        self.key_event(key, true);
     }
 
-    fn key_up(&self) {
-        self.key_event(false);
+    fn key_up(&self, key: Key) {
+        self.key_event(key, false);
     }
 
-    fn key_press(&self) {
-        self.key_event(true);
-        self.key_event(false);
+    fn key_press(&self, key: Key) {
+        self.key_event(key, true);
+        self.key_event(key, false);
     }
 
     fn button_down(&self, button: MouseButton) {
@@ -74,5 +74,15 @@ impl InputConnection for Connection {
     }
 
     fn move_mouse(&self, x: i32, y: i32) {
+    }
+}
+
+fn to_virtualkey(key: Key) -> UINT {
+    use Key::*;
+
+    match key {
+        A => 0x41,
+        B => 0x42,
+        C => 0x43,
     }
 }

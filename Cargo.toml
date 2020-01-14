@@ -10,6 +10,10 @@ crate-type = ["lib", "cdylib"]
 [features]
 ffi = []
 
+[dependencies]
+strum = "0.17"
+strum_macros = "0.17"
+
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"
 
